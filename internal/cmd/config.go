@@ -38,10 +38,10 @@ write_files:
       engine="$4"
       
       if [ "$engine" == "mysql" ]; then
-          docker exec -i "$container" mysql -uroot -pnitro -e "CREATE DATABASE IF NOT EXISTS $database;"
-          docker exec -i "$container" mysql -uroot -pnitro -e "GRANT ALL ON $database.* TO 'nitro'@'%';"
-          docker exec -i "$container" mysql -uroot -pnitro -e "FLUSH PRIVILEGES;"
-          cat "$filename" | pv | docker exec -i "$container" mysql -unitro -pnitro "$database" --init-command="SET autocommit=0;"
+          docker exec -i "$container" mysql --defaults-extra-file=/opt/nitro/mysql/root.cnf -e "CREATE DATABASE IF NOT EXISTS $database;"
+          docker exec -i "$container" mysql --defaults-extra-file=/opt/nitro/mysql/root.cnf -e "GRANT ALL ON $database.* TO 'nitro'@'%';"
+          docker exec -i "$container" mysql --defaults-extra-file=/opt/nitro/mysql/root.cnf -e "FLUSH PRIVILEGES;"
+          cat "$filename" | pv | docker exec -i "$container" mysql --defaults-extra-file=/opt/nitro/mysql/nitro.cnf "$database" --init-command="SET autocommit=0;"
       else
           docker exec "$container" psql -U nitro -c "CREATE DATABASE $database OWNER nitro;"
           cat "$filename" | pv | docker exec -i "$container" psql -U nitro -d "$database"
@@ -63,9 +63,9 @@ write_files:
       fi
 
       if [ "$engine" == "mysql" ]; then
-          docker exec "$container" bash -c "while ! mysqladmin ping -h 127.0.0.1 -uroot -pnitro; do echo 'waiting...'; sleep 4; done"
-          docker exec "$container" mysql -uroot -pnitro --silent --no-beep -e "GRANT ALL ON *.* TO 'nitro'@'%';"
-          docker exec "$container" mysql -uroot -pnitro -e "FLUSH PRIVILEGES;"
+          docker exec "$container" bash -c "while ! mysqladmin --defaults-extra-file=/opt/nitro/mysql/root.cnf ping; do echo 'waiting...'; sleep 4; done"
+          docker exec "$container" mysql --defaults-extra-file=/opt/nitro/mysql/root.cnf --silent --no-beep -e "GRANT ALL ON *.* TO 'nitro'@'%';"
+          docker exec "$container" mysql --defaults-extra-file=/opt/nitro/mysql/root.cnf -e "FLUSH PRIVILEGES;"
           echo "setting root permissions on user nitro"
       else
           docker exec "$container" psql -U postgres -c "ALTER USER nitro WITH SUPERUSER;"
@@ -95,6 +95,18 @@ write_files:
              fastcgi_read_timeout 240;
           }
       }
+  - path: /opt/nitro/mysql/root.cnf
+    content: |
+      [client]
+      user=root
+      password=nitro
+      host=127.0.0.1
+  - path: /opt/nitro/mysql/nitro.cnf
+    content: |
+      [client]
+      user=nitro
+      password=nitro
+      host=127.0.0.1
   - path: /opt/nitro/php-xdebug.ini
     content: |
       zend_extension=xdebug.so
