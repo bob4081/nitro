@@ -12,7 +12,10 @@ if [ -z "$DIRECTORY" ]; then
   exit
 fi
 
-mkdir -p "$DIRECTORY"
+# create the directory if it does not exist
+if [ ! -d "$DIRECTORY" ]; then
+  mkdir -p "$DIRECTORY"
+fi
 
 # mounting the workspace through nfs
 BOOT_MOUNT="$1 $DIRECTORY nfs rw,hard,intr,nolock,lookupcache=none 0 0"
