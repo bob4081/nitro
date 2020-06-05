@@ -18,7 +18,7 @@ if [ ! -d "$DIRECTORY" ]; then
 fi
 
 # mounting the workspace through nfs
-BOOT_MOUNT="$1 $DIRECTORY nfs rw,hard,intr,nolock,lookupcache=none 0 0"
+BOOT_MOUNT="$HOST_SHARE $DIRECTORY nfs rw,hard,intr,nolock,lookupcache=none,actimeo=1 0 0"
 
 # putting it in /etc/fstab so it will mount on boot.
 echo "$BOOT_MOUNT" >>/etc/fstab

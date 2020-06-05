@@ -50,4 +50,4 @@ fi
 # by giving the share address as a argument to that script.
 multipass copy-files ./provision.sh "$MACHINE_NAME":/tmp/provision.sh
 multipass exec "$MACHINE_NAME" sudo chmod +x /tmp/provision.sh
-multipass exec "$MACHINE_NAME" sudo /tmp/provision.sh "$HOST_SHARE" "$WORKSPACE_PATH"
+multipass exec "$MACHINE_NAME" sudo /tmp/provision.sh "$HOST_SHARE" "/home/ubuntu/sites"
