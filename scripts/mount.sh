@@ -34,7 +34,7 @@ EXPORT_FILE=$(cat /etc/exports)
 
 #only add share if not already present in /etc/exports
 if [[ ! $EXPORT_FILE =~ $SHARE ]]; then
-  echo "I'll enable NFS. I'll need a admin pass for that."
+  echo "Enabling NFS, need a admin pass for that."
 
   echo "$EXPORT_FILE" >/tmp/exports
   echo "$SHARE" >>/tmp/exports
