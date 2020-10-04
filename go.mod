@@ -3,6 +3,8 @@ module github.com/craftcms/nitro
 go 1.15
 
 require (
+	github.com/beberlei/fastcgi-serve v0.0.0-20190725071759-5e0dc21e286c // indirect
+	github.com/beberlei/hhvm-serve v0.0.0-20190725071759-5e0dc21e286c // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/golang/protobuf v1.4.2
 	github.com/h2non/filetype v1.1.0
@@ -19,6 +21,7 @@ require (
 	github.com/spf13/viper v1.7.0
 	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/txn2/txeh v1.3.0
+	github.com/yookoala/gofast v0.4.0 // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect
 	golang.org/x/sys v0.0.0-20200722175500-76b94024e4b6 // indirect
 	golang.org/x/text v0.3.3 // indirect
